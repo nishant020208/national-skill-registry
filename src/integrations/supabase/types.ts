@@ -98,7 +98,36 @@ export type Database = {
           trainer_action_at?: string | null
           trainer_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "credential_requests_credential_fk"
+            columns: ["credential_id"]
+            isOneToOne: false
+            referencedRelation: "credentials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credential_requests_institution_fk"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credential_requests_skill_fk"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "skills"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credential_requests_student_fk"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       credentials: {
         Row: {
@@ -315,7 +344,15 @@ export type Database = {
           student_id?: string
           user_agent?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "scan_logs_student_fk"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       skills: {
         Row: {
