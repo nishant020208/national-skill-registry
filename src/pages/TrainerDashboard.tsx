@@ -125,7 +125,7 @@ const TrainerDashboard = () => {
           </Dialog>
 
           <Dialog open={openIssue} onOpenChange={setOpenIssue}>
-            <DialogTrigger asChild><Button className="shadow-glow"><BadgeCheck className="size-4 mr-1" />Issue credential</Button></DialogTrigger>
+            <DialogTrigger asChild><Button ><BadgeCheck className="size-4 mr-1" />Issue credential</Button></DialogTrigger>
             <DialogContent>
               <DialogHeader><DialogTitle>Issue credential</DialogTitle></DialogHeader>
               <form onSubmit={issueCredential} className="space-y-4">
