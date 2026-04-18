@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShieldCheck, ShieldAlert, Building2, Sparkles, Download, ArrowLeft, Hash } from "lucide-react";
+import { ShieldCheck, ShieldAlert, Building2, Sparkles, Download, ArrowLeft, Hash, History } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
