@@ -13,6 +13,9 @@ import PrincipalDashboard from "./pages/PrincipalDashboard.tsx";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
 import PassportBrowse from "./pages/PassportBrowse.tsx";
 import Verify from "./pages/Verify.tsx";
+import About from "./pages/About.tsx";
+import Privacy from "./pages/Privacy.tsx";
+import Terms from "./pages/Terms.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -27,6 +30,9 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/verify/:studentId" element={<Verify />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/trainer" element={<ProtectedRoute roles={["trainer", "principal", "iti_admin"]}><TrainerDashboard /></ProtectedRoute>} />

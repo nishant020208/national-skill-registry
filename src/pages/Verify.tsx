@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { levelLabel, levelColor } from "@/lib/credify";
+import { SiteFooter } from "@/components/SiteFooter";
 
 type Student = { id: string; name: string; trade: string; institution_id: string };
 type Inst = { id: string; name: string; location: string | null };
@@ -60,24 +61,85 @@ const Verify = () => {
   const downloadPDF = () => {
     if (!student || !institution) return;
     const doc = new jsPDF();
-    doc.setFillColor(26, 28, 35); doc.rect(0, 0, 210, 40, "F");
-    doc.setTextColor(255); doc.setFontSize(22).setFont("helvetica", "bold").text("CREDIFY", 14, 18);
-    doc.setFontSize(10).setFont("helvetica", "normal").text("Verifiable Micro-Skill Passport", 14, 26);
-    doc.setTextColor(0);
-    doc.setFontSize(18).setFont("helvetica", "bold").text(student.name, 14, 56);
-    doc.setFontSize(11).setFont("helvetica", "normal").text(`Trade: ${student.trade}`, 14, 64);
-    doc.text(`Institution: ${institution.name}${institution.location ? `, ${institution.location}` : ""}`, 14, 70);
-    doc.text(`Verified at: ${window.location.origin}/verify/${student.id}`, 14, 76);
+    const pageW = 210;
+
+    // Tricolour accent strip (saffron / white / green)
+    doc.setFillColor(255, 153, 51); doc.rect(0, 0, pageW, 2, "F");
+    doc.setFillColor(255, 255, 255); doc.rect(0, 2, pageW, 2, "F");
+    doc.setFillColor(19, 136, 8); doc.rect(0, 4, pageW, 2, "F");
+
+    // Deep blue header band (#1E3A8A)
+    doc.setFillColor(30, 58, 138);
+    doc.rect(0, 6, pageW, 34, "F");
+
+    // Logo block (white square with shield)
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(14, 14, 18, 18, 2, 2, "F");
+    doc.setDrawColor(30, 58, 138);
+    doc.setLineWidth(0.6);
+    // Simple shield outline
+    doc.setFillColor(30, 58, 138);
+    doc.triangle(23, 18, 19, 21, 19, 26, "F");
+    doc.triangle(23, 18, 27, 21, 27, 26, "F");
+    doc.triangle(19, 26, 27, 26, 23, 30, "F");
+
+    // Header text
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20).setFont("helvetica", "bold").text("CREDIFY", 38, 22);
+    doc.setFontSize(9).setFont("helvetica", "normal").text("Verifiable Micro-Skill Passport", 38, 28);
+    doc.setFontSize(8).text("Government of India · Skill Initiative", 38, 33);
+
+    // Right-side: certificate label
+    doc.setFontSize(8).setFont("helvetica", "normal");
+    doc.text("CERTIFICATE OF SKILL VERIFICATION", pageW - 14, 22, { align: "right" });
+    doc.setFontSize(7);
+    doc.text(`Issued: ${new Date().toLocaleDateString("en-IN")}`, pageW - 14, 28, { align: "right" });
+    doc.text(`Ref: ${student.id.slice(0, 8).toUpperCase()}`, pageW - 14, 33, { align: "right" });
+
+    // Watermark seal (large faint circle behind content)
+    doc.setDrawColor(30, 58, 138);
+    doc.setLineWidth(0.4);
+    doc.setFillColor(243, 244, 246);
+    doc.circle(pageW / 2, 170, 45, "FD");
+    doc.setTextColor(200, 210, 225);
+    doc.setFontSize(36).setFont("helvetica", "bold");
+    doc.text("CREDIFY", pageW / 2, 168, { align: "center" });
+    doc.setFontSize(9).setFont("helvetica", "normal");
+    doc.text("OFFICIAL · GOVT. OF INDIA", pageW / 2, 178, { align: "center" });
+
+    // Holder details
+    doc.setTextColor(20, 20, 30);
+    doc.setFontSize(10).setFont("helvetica", "bold").text("CREDENTIAL HOLDER", 14, 56);
+    doc.setDrawColor(30, 58, 138); doc.setLineWidth(0.4);
+    doc.line(14, 58, 60, 58);
+
+    doc.setFontSize(18).setFont("helvetica", "bold").setTextColor(30, 58, 138);
+    doc.text(student.name, 14, 67);
+    doc.setFontSize(10).setFont("helvetica", "normal").setTextColor(60, 60, 70);
+    doc.text(`Trade: ${student.trade}`, 14, 74);
+    doc.text(`Institution: ${institution.name}${institution.location ? `, ${institution.location}` : ""}`, 14, 80);
+    doc.setFontSize(8).setTextColor(100, 100, 115);
+    doc.text(`Verify online: ${window.location.origin}/verify/${student.id}`, 14, 86);
 
     autoTable(doc, {
-      startY: 88,
+      startY: 94,
       head: [["Skill", "Level", "Status", "Credential Hash"]],
       body: creds.map(c => [c.skills?.name ?? "—", `L${c.level} ${levelLabel(c.level)}`, c.status.toUpperCase(), c.hash.slice(0, 24) + "…"]),
       theme: "grid",
-      headStyles: { fillColor: [42, 92, 141] },
+      headStyles: { fillColor: [30, 58, 138], textColor: 255, fontStyle: "bold", fontSize: 9 },
+      bodyStyles: { fontSize: 9, textColor: [40, 40, 50] },
+      alternateRowStyles: { fillColor: [248, 249, 251] },
+      styles: { lineColor: [220, 224, 232], lineWidth: 0.2, cellPadding: 3 },
     });
 
-    doc.setFontSize(9).setTextColor(120).text("This certificate is verifiable in real-time via QR code.", 14, 285);
+    // Footer tricolour strip
+    doc.setFillColor(255, 153, 51); doc.rect(0, 287, pageW, 2, "F");
+    doc.setFillColor(255, 255, 255); doc.rect(0, 289, pageW, 2, "F");
+    doc.setFillColor(19, 136, 8); doc.rect(0, 291, pageW, 2, "F");
+
+    doc.setFontSize(8).setTextColor(110, 110, 125).setFont("helvetica", "normal");
+    doc.text("This certificate is sealed with SHA-256 and verifiable in real-time via the QR code on the public verification page.", pageW / 2, 281, { align: "center" });
+
     doc.save(`Credify-${student.name.replace(/\s+/g, "_")}.pdf`);
   };
 
@@ -191,6 +253,7 @@ const Verify = () => {
 
         <p className="text-xs text-muted-foreground text-center mt-8">Verified by Credify · No login required · Public verification page</p>
       </main>
+      <SiteFooter />
     </div>
   );
 };

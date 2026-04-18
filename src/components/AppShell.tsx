@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ShieldCheck, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const AppShell = ({ children, nav }: { children: ReactNode; nav?: { to: string; label: string }[] }) => {
   const { profile, signOut } = useAuth();
@@ -54,6 +55,7 @@ export const AppShell = ({ children, nav }: { children: ReactNode; nav?: { to: s
         </div>
       </header>
       <main className="container py-8">{children}</main>
+      <SiteFooter />
     </div>
   );
 };
