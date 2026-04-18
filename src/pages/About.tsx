@@ -2,9 +2,9 @@ import { AppShell } from "@/components/AppShell";
 
 const sections: { title: string; body: string[] }[] = [
   {
-    title: "About Credify",
+    title: "About NATIONAL SKILL REGISTRY",
     body: [
-      "Credify is a Government of India skill initiative that issues verifiable, tamper-proof micro-skill credentials to graduates of Industrial Training Institutes (ITIs) and Polytechnics.",
+      "NATIONAL SKILL REGISTRY is a Government of India skill initiative that issues verifiable, tamper-proof micro-skill credentials to graduates of Industrial Training Institutes (ITIs) and Polytechnics.",
       "The platform empowers MSME employers to verify candidate competencies in seconds via a simple QR scan, while preserving graduate privacy and institutional trust.",
     ],
   },

@@ -64,7 +64,7 @@ const EmployerSearch = () => {
           <Link to="/" className="flex items-center gap-2.5">
             <div className="size-9 rounded-md bg-primary grid place-items-center"><ShieldCheck className="size-5 text-primary-foreground" /></div>
             <div className="leading-tight">
-              <div className="font-semibold">Credify · Employer Search</div>
+              <div className="font-semibold">NATIONAL SKILL REGISTRY · Employer Search</div>
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Public · No login required</div>
             </div>
           </Link>

@@ -35,7 +35,7 @@ const Auth = () => {
       const msg = error.message.includes("whitelisted") ? "This email is not authorized. Please contact your ITI admin." : error.message;
       toast({ title: "Sign up failed", description: msg, variant: "destructive" }); return;
     }
-    toast({ title: "Welcome to Credify", description: "Account created successfully." });
+    toast({ title: "Welcome to NATIONAL SKILL REGISTRY", description: "Account created successfully." });
     navigate("/dashboard");
   };
 
@@ -48,7 +48,7 @@ const Auth = () => {
             <div className="size-12 rounded-md bg-primary grid place-items-center mx-auto mb-3">
               <ShieldCheck className="size-6 text-primary-foreground" />
             </div>
-            <h1 className="text-xl font-semibold">Credify</h1>
+            <h1 className="text-xl font-semibold">NATIONAL SKILL REGISTRY</h1>
             <p className="text-xs text-muted-foreground mt-1">Authorised access · Whitelisted users only</p>
           </div>
 

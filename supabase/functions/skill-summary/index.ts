@@ -1,4 +1,4 @@
-// AI-generated skill summary for Credify verification + student dashboards
+// AI-generated skill summary for NATIONAL SKILL REGISTRY verification + student dashboards
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",

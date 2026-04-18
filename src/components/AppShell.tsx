@@ -21,7 +21,7 @@ export const AppShell = ({ children, nav }: { children: ReactNode; nav?: { to: s
               <ShieldCheck className="size-5 text-primary-foreground" />
             </div>
             <div className="leading-tight">
-              <div className="font-semibold tracking-tight text-base">Credify</div>
+              <div className="font-semibold tracking-tight text-base">NATIONAL SKILL REGISTRY</div>
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Govt. Skill Passport</div>
             </div>
           </Link>
