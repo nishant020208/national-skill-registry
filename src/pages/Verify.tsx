@@ -107,69 +107,72 @@ const Verify = () => {
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-border/60 backdrop-blur-md bg-background/70">
+    <div className="min-h-screen bg-surface-1">
+      <div className="gov-strip" />
+      <header className="border-b border-border bg-card">
         <div className="container py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="size-8 rounded-lg bg-gradient-primary grid place-items-center"><ShieldCheck className="size-4 text-primary-foreground" /></div>
-            <span className="font-bold">Credify</span>
+          <Link to="/" className="flex items-center gap-2.5">
+            <div className="size-9 rounded-md bg-primary grid place-items-center"><ShieldCheck className="size-5 text-primary-foreground" /></div>
+            <div className="leading-tight">
+              <div className="font-semibold">Credify</div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Govt. Skill Passport</div>
+            </div>
           </Link>
-          <Button onClick={downloadPDF} variant="outline" size="sm"><Download className="size-4 mr-1" />Certificate</Button>
+          <Button onClick={downloadPDF} variant="outline" size="sm"><Download className="size-4 mr-1" />Download Certificate</Button>
         </div>
       </header>
 
       <main className="container py-8 max-w-5xl">
         {/* Verification banner */}
-        <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }}
-          className={`glass-card p-6 mb-6 flex items-center gap-4 ${overallValid ? "border-success/50" : "border-destructive/50"}`}>
-          <div className={`size-14 rounded-xl grid place-items-center ${overallValid ? "bg-success/20" : "bg-destructive/20"}`}>
-            {overallValid ? <ShieldCheck className="size-7 text-success" /> : <ShieldAlert className="size-7 text-destructive" />}
+        <div className={`bg-card border-2 rounded-lg p-6 mb-6 flex items-center gap-4 ${overallValid ? "border-success" : "border-destructive"}`}>
+          <div className={`size-14 rounded-md grid place-items-center ${overallValid ? "bg-success" : "bg-destructive"}`}>
+            {overallValid ? <ShieldCheck className="size-7 text-success-foreground" /> : <ShieldAlert className="size-7 text-destructive-foreground" />}
           </div>
           <div className="flex-1">
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Verification result</div>
-            <div className="text-2xl font-bold mt-0.5">{overallValid ? "Authentic & Verified" : allRevoked ? "All credentials revoked" : "No credentials"}</div>
+            <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Verification Result</div>
+            <div className={`text-2xl font-bold mt-0.5 ${overallValid ? "text-success" : "text-destructive"}`}>
+              {overallValid ? "VERIFIED" : allRevoked ? "REVOKED" : "NO CREDENTIALS"}
+            </div>
             <div className="text-sm text-muted-foreground mt-1">{validCount} valid · {creds.length - validCount} revoked · sealed by SHA-256</div>
           </div>
-          <Badge className="verify-badge hidden sm:inline-flex">Blockchain-verified</Badge>
-        </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-[1fr_280px] gap-6 mb-6">
-          <div className="glass-card p-6">
-            <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground mb-1">Skill passport holder</div>
-            <h1 className="text-3xl font-bold tracking-tight">{student.name}</h1>
-            <div className="text-muted-foreground mt-1">Trade: <span className="text-foreground font-medium">{student.trade}</span></div>
+          <div className="bg-card border border-border rounded-lg p-6">
+            <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">Skill Passport Holder</div>
+            <h1 className="text-2xl font-bold tracking-tight">{student.name}</h1>
+            <div className="text-sm text-muted-foreground mt-1">Trade: <span className="text-foreground font-medium">{student.trade}</span></div>
             <div className="flex items-center gap-2 mt-4 text-sm">
               <Building2 className="size-4 text-muted-foreground" />
               <span>{institution?.name}{institution?.location ? `, ${institution.location}` : ""}</span>
             </div>
 
-            <div className="mt-6 p-4 rounded-xl bg-surface-2 border border-border">
-              <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-primary-glow mb-2">
-                <Sparkles className="size-3.5" />AI Skill Summary
+            <div className="mt-6 p-4 rounded-md bg-surface-1 border border-border">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-primary font-semibold mb-2">
+                <Sparkles className="size-3.5" />Skill Summary
               </div>
-              {summary ? <p className="text-sm leading-relaxed">{summary}</p> : <div className="space-y-1.5"><div className="skeleton h-3 w-full" /><div className="skeleton h-3 w-4/5" /></div>}
+              {summary ? <p className="text-sm leading-relaxed text-foreground">{summary}</p> : <div className="space-y-1.5"><div className="skeleton h-3 w-full" /><div className="skeleton h-3 w-4/5" /></div>}
             </div>
           </div>
 
-          <div className="glass-card p-6 flex flex-col items-center justify-center">
-            <div className="bg-white p-3 rounded-xl">
+          <div className="bg-card border border-border rounded-lg p-6 flex flex-col items-center justify-center">
+            <div className="bg-white p-3 rounded-md border border-border">
               <QRCodeSVG value={`${window.location.origin}/verify/${student.id}`} size={180} />
             </div>
             <div className="text-xs text-muted-foreground mt-3 text-center">Scan to re-verify</div>
             <div className="mt-4 w-full pt-4 border-t border-border text-center">
-              <div className="text-xs uppercase tracking-wider text-muted-foreground">Institution Trust Score</div>
+              <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Institution Trust Score</div>
               <div className="text-2xl font-bold text-success mt-1">{trustScore}%</div>
             </div>
           </div>
         </div>
 
-        <div className="glass-card overflow-hidden">
-          <div className="p-5 border-b border-border/60 font-semibold">Verified skills ({creds.length})</div>
+        <div className="bg-card border border-border rounded-lg overflow-hidden">
+          <div className="p-4 border-b border-border font-semibold bg-surface-1">Verified Skills ({creds.length})</div>
           {creds.length === 0 ? <div className="p-12 text-center text-muted-foreground">No credentials issued.</div> :
-            <div className="divide-y divide-border/60">
-              {creds.map((c, i) => (
-                <motion.div key={c.id} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}
-                  className="p-5 flex items-center justify-between flex-wrap gap-3">
+            <div className="divide-y divide-border">
+              {creds.map(c => (
+                <div key={c.id} className="p-4 flex items-center justify-between flex-wrap gap-3">
                   <div>
                     <div className="font-semibold">{c.skills?.name}</div>
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono mt-1">
@@ -181,7 +184,7 @@ const Verify = () => {
                     <Badge variant="outline" className={levelColor(c.level)}>L{c.level} · {levelLabel(c.level)}</Badge>
                     {c.status === "valid" ? <Badge className="verify-badge">Valid</Badge> : <Badge variant="destructive">Revoked</Badge>}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>}
         </div>

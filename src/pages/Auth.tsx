@@ -40,41 +40,44 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen grid place-items-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="size-12 rounded-2xl bg-gradient-primary grid place-items-center mx-auto shadow-glow mb-4">
-            <ShieldCheck className="size-6 text-primary-foreground" />
+    <div className="min-h-screen bg-surface-1">
+      <div className="gov-strip" />
+      <div className="grid place-items-center px-4 py-16">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-6">
+            <div className="size-12 rounded-md bg-primary grid place-items-center mx-auto mb-3">
+              <ShieldCheck className="size-6 text-primary-foreground" />
+            </div>
+            <h1 className="text-xl font-semibold">Credify</h1>
+            <p className="text-xs text-muted-foreground mt-1">Authorised access · Whitelisted users only</p>
           </div>
-          <h1 className="text-2xl font-bold">Credify</h1>
-          <p className="text-sm text-muted-foreground">Whitelisted access only</p>
-        </div>
 
-        <div className="glass-card p-6">
-          <Tabs defaultValue="signin">
-            <TabsList className="grid grid-cols-2 mb-6">
-              <TabsTrigger value="signin">Sign in</TabsTrigger>
-              <TabsTrigger value="signup">Sign up</TabsTrigger>
-            </TabsList>
+          <div className="bg-card border border-border rounded-lg p-6">
+            <Tabs defaultValue="signin">
+              <TabsList className="grid grid-cols-2 mb-6">
+                <TabsTrigger value="signin">Sign in</TabsTrigger>
+                <TabsTrigger value="signup">Sign up</TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div><Label>Email</Label><Input type="email" required value={email} onChange={e => setEmail(e.target.value)} /></div>
-                <div><Label>Password</Label><Input type="password" required value={password} onChange={e => setPassword(e.target.value)} /></div>
-                <Button className="w-full bg-gradient-primary" disabled={loading}>{loading ? "Signing in…" : "Sign in"}</Button>
-              </form>
-            </TabsContent>
+              <TabsContent value="signin">
+                <form onSubmit={handleSignIn} className="space-y-4">
+                  <div><Label>Email</Label><Input type="email" required value={email} onChange={e => setEmail(e.target.value)} /></div>
+                  <div><Label>Password</Label><Input type="password" required value={password} onChange={e => setPassword(e.target.value)} /></div>
+                  <Button className="w-full" disabled={loading}>{loading ? "Signing in…" : "Sign in"}</Button>
+                </form>
+              </TabsContent>
 
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div><Label>Full name</Label><Input required value={name} onChange={e => setName(e.target.value)} /></div>
-                <div><Label>Whitelisted email</Label><Input type="email" required value={email} onChange={e => setEmail(e.target.value)} /></div>
-                <div><Label>Password</Label><Input type="password" required minLength={6} value={password} onChange={e => setPassword(e.target.value)} /></div>
-                <Button className="w-full bg-gradient-primary" disabled={loading}>{loading ? "Creating…" : "Create account"}</Button>
-                <p className="text-xs text-muted-foreground text-center">Role is auto-assigned from the whitelist.</p>
-              </form>
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="signup">
+                <form onSubmit={handleSignUp} className="space-y-4">
+                  <div><Label>Full name</Label><Input required value={name} onChange={e => setName(e.target.value)} /></div>
+                  <div><Label>Whitelisted email</Label><Input type="email" required value={email} onChange={e => setEmail(e.target.value)} /></div>
+                  <div><Label>Password</Label><Input type="password" required minLength={6} value={password} onChange={e => setPassword(e.target.value)} /></div>
+                  <Button className="w-full" disabled={loading}>{loading ? "Creating…" : "Create account"}</Button>
+                  <p className="text-xs text-muted-foreground text-center">Role is auto-assigned from the whitelist.</p>
+                </form>
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       </div>
     </div>
