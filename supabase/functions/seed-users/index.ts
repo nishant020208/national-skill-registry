@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
   for (const a of accounts) {
     const { data, error } = await admin.auth.admin.createUser({
       email: a.email,
-      password: "Credify@2026",
+      password: "NATIONAL SKILL REGISTRY@2026",
       email_confirm: true,
       user_metadata: { name: a.name },
     });

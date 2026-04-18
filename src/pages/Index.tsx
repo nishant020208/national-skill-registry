@@ -25,7 +25,7 @@ const Index = () => (
           Government-issued skill credentials for ITI &amp; Polytechnic graduates.
         </h1>
         <p className="text-base text-muted-foreground mt-4 max-w-2xl">
-          Credify provides ITI and Polytechnic graduates with tamper-proof skill credentials that employers can verify instantly via a QR scan.
+          NATIONAL SKILL REGISTRY provides ITI and Polytechnic graduates with tamper-proof skill credentials that employers can verify instantly via a QR scan.
         </p>
         <div className="flex flex-wrap items-center gap-3 mt-6">
           <Button asChild size="default">

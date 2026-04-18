@@ -149,7 +149,7 @@ const Verify = () => {
     doc.setFontSize(8).setTextColor(110, 110, 125).setFont("helvetica", "normal");
     doc.text("This certificate is sealed with SHA-256 and verifiable in real-time via the QR code on the public verification page.", pageW / 2, 281, { align: "center" });
 
-    doc.save(`Credify-${student.name.replace(/\s+/g, "_")}.pdf`);
+    doc.save(`NATIONAL SKILL REGISTRY-${student.name.replace(/\s+/g, "_")}.pdf`);
   };
 
   if (loading) {
@@ -185,7 +185,7 @@ const Verify = () => {
           <Link to="/" className="flex items-center gap-2.5">
             <div className="size-9 rounded-md bg-primary grid place-items-center"><ShieldCheck className="size-5 text-primary-foreground" /></div>
             <div className="leading-tight">
-              <div className="font-semibold">Credify</div>
+              <div className="font-semibold">NATIONAL SKILL REGISTRY</div>
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Govt. Skill Passport</div>
             </div>
           </Link>
@@ -281,7 +281,7 @@ const Verify = () => {
           </div>
         )}
 
-        <p className="text-xs text-muted-foreground text-center mt-8">Verified by Credify · No login required · Public verification page</p>
+        <p className="text-xs text-muted-foreground text-center mt-8">Verified by NATIONAL SKILL REGISTRY · No login required · Public verification page</p>
       </main>
       <SiteFooter />
     </div>
