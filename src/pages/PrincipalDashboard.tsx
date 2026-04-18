@@ -10,22 +10,37 @@ import { useToast } from "@/hooks/use-toast";
 import { levelColor, levelLabel } from "@/lib/credify";
 
 type Cred = { id: string; level: number; status: string; hash: string; student_id: string; students: { name: string } | null; skills: { name: string } | null };
+type Req = { id: string; reason: string; status: string; created_at: string; student_id: string; students: { name: string } | null };
 
 const PrincipalDashboard = () => {
   const { user, profile } = useAuth();
   const { toast } = useToast();
   const [creds, setCreds] = useState<Cred[]>([]);
+  const [reqs, setReqs] = useState<Req[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = async () => {
     if (!profile?.institution_id) return;
     setLoading(true);
-    const { data } = await supabase.from("credentials")
-      .select("id,level,status,hash,student_id,students(name),skills(name)")
-      .eq("institution_id", profile.institution_id).order("created_at", { ascending: false });
-    setCreds((data ?? []) as Cred[]); setLoading(false);
+    const [c, r] = await Promise.all([
+      supabase.from("credentials")
+        .select("id,level,status,hash,student_id,students(name),skills(name)")
+        .eq("institution_id", profile.institution_id).order("created_at", { ascending: false }),
+      supabase.from("reassessment_requests")
+        .select("id,reason,status,created_at,student_id,students(name)")
+        .eq("institution_id", profile.institution_id).order("created_at", { ascending: false })
+    ]);
+    setCreds((c.data ?? []) as Cred[]);
+    setReqs((r.data ?? []) as Req[]);
+    setLoading(false);
   };
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [profile?.institution_id]);
+
+  const updateReqStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("reassessment_requests").update({ status }).eq("id", id);
+    if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    toast({ title: `Request ${status}` }); load();
+  };
 
   const revoke = async (id: string) => {
     const { error } = await supabase.from("credentials").update({ status: "revoked" }).eq("id", id);
@@ -61,27 +76,61 @@ const PrincipalDashboard = () => {
         </div>
       </div>
 
-      <div className="glass-card overflow-hidden">
-        <div className="p-5 border-b border-border/60 font-semibold">All credentials</div>
-        {loading ? <div className="p-5 space-y-2">{[...Array(5)].map((_, i) => <div key={i} className="skeleton h-14" />)}</div> :
-          creds.length === 0 ? <div className="p-12 text-center text-muted-foreground">No credentials yet.</div> :
-          <div className="divide-y divide-border/60">
-            {creds.map(c => (
-              <div key={c.id} className="p-5 flex items-center justify-between">
-                <div>
-                  <div className="font-medium">{c.students?.name} <span className="text-muted-foreground">· {c.skills?.name}</span></div>
-                  <div className="text-xs text-muted-foreground font-mono mt-0.5">{c.hash.slice(0, 24)}…</div>
+      <div className="grid lg:grid-cols-2 gap-6">
+        <div className="glass-card overflow-hidden">
+          <div className="p-5 border-b border-border/60 font-semibold bg-surface-1/50">All credentials</div>
+          {loading ? <div className="p-5 space-y-2">{[...Array(5)].map((_, i) => <div key={i} className="skeleton h-14" />)}</div> :
+            creds.length === 0 ? <div className="p-12 text-center text-muted-foreground">No credentials yet.</div> :
+            <div className="divide-y divide-border/60 max-h-[500px] overflow-y-auto">
+              {creds.map(c => (
+                <div key={c.id} className="p-5 flex items-center justify-between">
+                  <div>
+                    <div className="font-medium">{c.students?.name} <span className="text-muted-foreground">· {c.skills?.name}</span></div>
+                    <div className="text-xs text-muted-foreground font-mono mt-0.5">{c.hash.slice(0, 24)}…</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className={levelColor(c.level)}>L{c.level} {levelLabel(c.level)}</Badge>
+                    {c.status === "valid" ? <Badge className="verify-badge">Valid</Badge> : <Badge variant="destructive">Revoked</Badge>}
+                    <Button asChild size="icon" variant="ghost"><Link to={`/verify/${c.student_id}`}><ExternalLink className="size-4" /></Link></Button>
+                    {c.status === "valid" && <Button size="sm" variant="destructive" onClick={() => revoke(c.id)}>Revoke</Button>}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className={levelColor(c.level)}>L{c.level} {levelLabel(c.level)}</Badge>
-                  {c.status === "valid" ? <Badge className="verify-badge">Valid</Badge> : <Badge variant="destructive">Revoked</Badge>}
-                  <Button asChild size="icon" variant="ghost"><Link to={`/verify/${c.student_id}`}><ExternalLink className="size-4" /></Link></Button>
-                  {c.status === "valid" && <Button size="sm" variant="destructive" onClick={() => revoke(c.id)}>Revoke</Button>}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          }
+        </div>
+
+        <div className="glass-card overflow-hidden">
+          <div className="p-5 border-b border-border/60 font-semibold bg-surface-1/50 flex items-center justify-between">
+            <span>Re-assessment Requests</span>
+            <Badge variant="secondary">{reqs.filter(r => r.status === "pending").length} pending</Badge>
           </div>
-        }
+          {loading ? <div className="p-5 space-y-2">{[...Array(3)].map((_, i) => <div key={i} className="skeleton h-14" />)}</div> :
+            reqs.length === 0 ? <div className="p-12 text-center text-muted-foreground">No pending requests.</div> :
+            <div className="divide-y divide-border/60 max-h-[500px] overflow-y-auto">
+              {reqs.map(r => (
+                <div key={r.id} className="p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium">{r.students?.name}</div>
+                      <div className="text-xs text-muted-foreground">{new Date(r.created_at).toLocaleString()}</div>
+                    </div>
+                    <Badge variant={r.status === "pending" ? "outline" : "default"} className="capitalize">{r.status}</Badge>
+                  </div>
+                  <div className="text-sm p-3 rounded bg-surface-1 border border-border italic text-muted-foreground">
+                    "{r.reason}"
+                  </div>
+                  {r.status === "pending" && (
+                    <div className="flex gap-2">
+                      <Button size="sm" className="flex-1" onClick={() => updateReqStatus(r.id, "approved")}>Approve</Button>
+                      <Button size="sm" variant="outline" className="flex-1 text-destructive" onClick={() => updateReqStatus(r.id, "rejected")}>Reject</Button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          }
+        </div>
       </div>
     </AppShell>
   );
