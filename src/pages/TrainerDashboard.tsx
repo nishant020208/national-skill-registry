@@ -119,13 +119,13 @@ const TrainerDashboard = () => {
               <form onSubmit={addStudent} className="space-y-4">
                 <div><Label>Name</Label><Input required value={sName} onChange={e => setSName(e.target.value)} /></div>
                 <div><Label>Trade</Label><Input required placeholder="e.g. Fitter, Electrician" value={sTrade} onChange={e => setSTrade(e.target.value)} /></div>
-                <Button className="w-full bg-gradient-primary">Add</Button>
+                <Button className="w-full">Add</Button>
               </form>
             </DialogContent>
           </Dialog>
 
           <Dialog open={openIssue} onOpenChange={setOpenIssue}>
-            <DialogTrigger asChild><Button className="bg-gradient-primary shadow-glow"><BadgeCheck className="size-4 mr-1" />Issue credential</Button></DialogTrigger>
+            <DialogTrigger asChild><Button className="shadow-glow"><BadgeCheck className="size-4 mr-1" />Issue credential</Button></DialogTrigger>
             <DialogContent>
               <DialogHeader><DialogTitle>Issue credential</DialogTitle></DialogHeader>
               <form onSubmit={issueCredential} className="space-y-4">
@@ -149,7 +149,7 @@ const TrainerDashboard = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button className="w-full bg-gradient-primary" disabled={!studentId || !skillId}>
+                <Button className="w-full" disabled={!studentId || !skillId}>
                   {offline ? <><WifiOff className="size-4 mr-1" />Queue offline</> : "Issue & seal hash"}
                 </Button>
               </form>

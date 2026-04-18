@@ -77,7 +77,7 @@ const AdminDashboard = () => {
                 <form onSubmit={addInst} className="space-y-4">
                   <div><Label>Name</Label><Input required value={iName} onChange={e => setIName(e.target.value)} /></div>
                   <div><Label>Location</Label><Input value={iLoc} onChange={e => setILoc(e.target.value)} /></div>
-                  <Button className="w-full bg-gradient-primary">Add</Button>
+                  <Button className="w-full">Add</Button>
                 </form>
               </DialogContent>
             </Dialog>
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
                       </Select>
                     </div>
                   )}
-                  <Button className="w-full bg-gradient-primary">Add</Button>
+                  <Button className="w-full">Add</Button>
                 </form>
               </DialogContent>
             </Dialog>
