@@ -15,16 +15,19 @@ Deno.serve(async (req) => {
   );
 
   const accounts = [
-    { email: "admin@credify.in", name: "ITI Admin" },
-    { email: "principal@credify.in", name: "Principal Mumbai" },
-    { email: "trainer@credify.in", name: "Trainer Mumbai" },
+    { email: "admin@credify.in", name: "ITI Admin", password: "NATIONAL SKILL REGISTRY@2026" },
+    { email: "principal@credify.in", name: "Principal Mumbai", password: "NATIONAL SKILL REGISTRY@2026" },
+    { email: "trainer@credify.in", name: "Trainer Mumbai", password: "NATIONAL SKILL REGISTRY@2026" },
+    // Real seeded student at ITI Institute 9 (131 credentials, Welder).
+    // Name MUST match the students.name row so handle_new_user links them.
+    { email: "priya.welder@nsr.in", name: "Priya", password: "Priya@2026" },
   ];
 
   const results: any[] = [];
   for (const a of accounts) {
     const { data, error } = await admin.auth.admin.createUser({
       email: a.email,
-      password: "NATIONAL SKILL REGISTRY@2026",
+      password: a.password,
       email_confirm: true,
       user_metadata: { name: a.name },
     });
