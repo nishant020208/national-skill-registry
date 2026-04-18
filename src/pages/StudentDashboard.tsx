@@ -18,6 +18,8 @@ import { useToast } from "@/hooks/use-toast";
 import { levelLabel, statusBadgeClass, statusLabel, computeSkillScore, scoreTier } from "@/lib/credify";
 import { EmptyState } from "@/components/EmptyState";
 import { Leaderboard } from "@/components/Leaderboard";
+import { SettingsPanel } from "@/components/SettingsPanel";
+import { Settings as SettingsIcon } from "lucide-react";
 
 type Student = { id: string; name: string; trade: string; institution_id: string };
 type Cred = { id: string; level: number; status: string; hash: string; created_at: string; skill_id: string; skills: { name: string } | null };
@@ -172,6 +174,7 @@ const StudentDashboard = () => {
           <TabsTrigger value="requests">Requests ({requests.length})</TabsTrigger>
           <TabsTrigger value="certificates">Certificates ({validCreds.length})</TabsTrigger>
           <TabsTrigger value="rank">Rank</TabsTrigger>
+          <TabsTrigger value="settings"><SettingsIcon className="size-3.5 mr-1" />Settings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="skills">
