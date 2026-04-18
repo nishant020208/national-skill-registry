@@ -163,6 +163,61 @@ export type Database = {
           },
         ]
       }
+      reassessment_requests: {
+        Row: {
+          created_at: string
+          credential_id: string | null
+          id: string
+          institution_id: string | null
+          reason: string
+          requested_by: string | null
+          status: string
+          student_id: string
+        }
+        Insert: {
+          created_at?: string
+          credential_id?: string | null
+          id?: string
+          institution_id?: string | null
+          reason: string
+          requested_by?: string | null
+          status?: string
+          student_id: string
+        }
+        Update: {
+          created_at?: string
+          credential_id?: string | null
+          id?: string
+          institution_id?: string | null
+          reason?: string
+          requested_by?: string | null
+          status?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reassessment_requests_credential_id_fkey"
+            columns: ["credential_id"]
+            isOneToOne: false
+            referencedRelation: "credentials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reassessment_requests_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reassessment_requests_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       skills: {
         Row: {
           created_at: string
@@ -191,6 +246,7 @@ export type Database = {
           institution_id: string
           name: string
           trade: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -198,6 +254,7 @@ export type Database = {
           institution_id: string
           name: string
           trade: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -205,6 +262,7 @@ export type Database = {
           institution_id?: string
           name?: string
           trade?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -298,7 +356,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "iti_admin" | "principal" | "trainer"
+      app_role: "iti_admin" | "principal" | "trainer" | "student"
       credential_status: "valid" | "revoked"
     }
     CompositeTypes: {
@@ -427,7 +485,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["iti_admin", "principal", "trainer"],
+      app_role: ["iti_admin", "principal", "trainer", "student"],
       credential_status: ["valid", "revoked"],
     },
   },
