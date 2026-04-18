@@ -430,7 +430,7 @@ Submit issues via GitHub Issues with:
 
 ### License
 
-[Specify license type if applicable]
+MIT LICENSE 2026 
 
 ---
 
