@@ -46,6 +46,60 @@ export type Database = {
           },
         ]
       }
+      credential_requests: {
+        Row: {
+          created_at: string
+          credential_id: string | null
+          evidence_url: string | null
+          id: string
+          institution_id: string
+          note: string | null
+          principal_action_at: string | null
+          principal_id: string | null
+          rejection_reason: string | null
+          requested_level: number
+          skill_id: string
+          status: string
+          student_id: string
+          trainer_action_at: string | null
+          trainer_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          credential_id?: string | null
+          evidence_url?: string | null
+          id?: string
+          institution_id: string
+          note?: string | null
+          principal_action_at?: string | null
+          principal_id?: string | null
+          rejection_reason?: string | null
+          requested_level: number
+          skill_id: string
+          status?: string
+          student_id: string
+          trainer_action_at?: string | null
+          trainer_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          credential_id?: string | null
+          evidence_url?: string | null
+          id?: string
+          institution_id?: string
+          note?: string | null
+          principal_action_at?: string | null
+          principal_id?: string | null
+          rejection_reason?: string | null
+          requested_level?: number
+          skill_id?: string
+          status?: string
+          student_id?: string
+          trainer_action_at?: string | null
+          trainer_id?: string | null
+        }
+        Relationships: []
+      }
       credentials: {
         Row: {
           created_at: string
@@ -54,9 +108,16 @@ export type Database = {
           institution_id: string
           issued_by: string | null
           level: number
+          principal_approved_at: string | null
+          principal_approved_by: string | null
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
           skill_id: string
           status: Database["public"]["Enums"]["credential_status"]
           student_id: string
+          trainer_approved_at: string | null
+          trainer_approved_by: string | null
         }
         Insert: {
           created_at?: string
@@ -65,9 +126,16 @@ export type Database = {
           institution_id: string
           issued_by?: string | null
           level: number
+          principal_approved_at?: string | null
+          principal_approved_by?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           skill_id: string
           status?: Database["public"]["Enums"]["credential_status"]
           student_id: string
+          trainer_approved_at?: string | null
+          trainer_approved_by?: string | null
         }
         Update: {
           created_at?: string
@@ -76,9 +144,16 @@ export type Database = {
           institution_id?: string
           issued_by?: string | null
           level?: number
+          principal_approved_at?: string | null
+          principal_approved_by?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           skill_id?: string
           status?: Database["public"]["Enums"]["credential_status"]
           student_id?: string
+          trainer_approved_at?: string | null
+          trainer_approved_by?: string | null
         }
         Relationships: [
           {
@@ -217,6 +292,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      scan_logs: {
+        Row: {
+          id: string
+          scanned_at: string
+          scanner_label: string | null
+          student_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          id?: string
+          scanned_at?: string
+          scanner_label?: string | null
+          student_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          id?: string
+          scanned_at?: string
+          scanner_label?: string | null
+          student_id?: string
+          user_agent?: string | null
+        }
+        Relationships: []
       }
       skills: {
         Row: {
@@ -357,7 +456,12 @@ export type Database = {
     }
     Enums: {
       app_role: "iti_admin" | "principal" | "trainer" | "student"
-      credential_status: "valid" | "revoked"
+      credential_status:
+        | "valid"
+        | "revoked"
+        | "pending_trainer"
+        | "pending_principal"
+        | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -486,7 +590,13 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["iti_admin", "principal", "trainer", "student"],
-      credential_status: ["valid", "revoked"],
+      credential_status: [
+        "valid",
+        "revoked",
+        "pending_trainer",
+        "pending_principal",
+        "rejected",
+      ],
     },
   },
 } as const
