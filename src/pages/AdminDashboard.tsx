@@ -232,6 +232,7 @@ const AdminDashboard = () => {
                         <SelectItem value="trainer">Trainer</SelectItem>
                         <SelectItem value="principal">Principal</SelectItem>
                         <SelectItem value="iti_admin">ITI Admin</SelectItem>
+                        <SelectItem value="student">Student</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
