@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ShieldCheck, QrCode, Building2, Lock, FileCheck, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppShell } from "@/components/AppShell";
+import { QrScanner } from "@/components/QrScanner";
 
 const features = [
   { icon: QrCode, title: "Instant QR verification", body: "Employers verify credentials in seconds via a single QR scan — no login required." },
