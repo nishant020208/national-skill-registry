@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { ShieldCheck, LogOut, LayoutDashboard, IdCard, Award, Trophy, Search, Inbox } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ShieldCheck, LogOut, LayoutDashboard, IdCard, Award, Trophy, Search, Inbox, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -57,17 +57,22 @@ export const AppShell = ({ children }: { children: ReactNode; nav?: NavItem[] })
       <div className="gov-strip" />
       <header className="border-b border-border bg-card">
         <div className="container flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="size-10 rounded-md bg-primary grid place-items-center">
-              <ShieldCheck className="size-5 text-primary-foreground" />
-            </div>
-            <div className="leading-tight">
-              <div className="font-bold tracking-tight text-base">NATIONAL SKILL REGISTRY</div>
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                Ministry of Skill Development &amp; Entrepreneurship · Government of India
+          <div className="flex items-center gap-3">
+            <Button size="icon" variant="ghost" onClick={() => navigate(-1)} aria-label="Go back" title="Go back">
+              <ArrowLeft className="size-4" />
+            </Button>
+            <div className="flex items-center gap-3">
+              <div className="size-10 rounded-md bg-primary grid place-items-center">
+                <ShieldCheck className="size-5 text-primary-foreground" />
+              </div>
+              <div className="leading-tight">
+                <div className="font-bold tracking-tight text-base">NATIONAL SKILL REGISTRY</div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                  Ministry of Skill Development &amp; Entrepreneurship · Government of India
+                </div>
               </div>
             </div>
-          </Link>
+          </div>
 
           <div className="flex items-center gap-3">
             {profile ? (

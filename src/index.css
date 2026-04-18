@@ -96,3 +96,14 @@
     background: linear-gradient(to right, hsl(28 100% 50%), hsl(0 0% 100%), hsl(142 71% 36%));
   }
 }
+
+/* Hide Lovable badge on published deployments */
+#lovable-badge,
+[id*="lovable-badge"],
+a[href*="lovable.dev"][target="_blank"],
+iframe[src*="lovable.dev/badge"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
