@@ -311,6 +311,9 @@ const StudentDashboard = () => {
           </div>
           <Leaderboard institutionId={student.institution_id} highlightStudentId={student.id} />
         </TabsContent>
+        <TabsContent value="settings">
+          <SettingsPanel />
+        </TabsContent>
       </Tabs>
     </AppShell>
   );
