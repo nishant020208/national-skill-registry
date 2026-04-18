@@ -3,22 +3,31 @@ import { Link } from "react-router-dom";
 import { Search, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/AppShell";
+import { useAuth } from "@/contexts/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 type Row = { id: string; name: string; trade: string; institutions: { name: string } | null };
 
 const PassportBrowse = () => {
+  const { profile } = useAuth();
   const [rows, setRows] = useState<Row[]>([]);
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase.from("students").select("id,name,trade,institutions(name)").order("created_at", { ascending: false }).limit(50);
+      let query = supabase.from("students").select("id,name,trade,institutions(name)").order("created_at", { ascending: false }).limit(50);
+      
+      // Filter by institution if trainer/principal
+      if (profile?.role !== "iti_admin" && profile?.institution_id) {
+        query = query.eq("institution_id", profile.institution_id);
+      }
+
+      const { data } = await query;
       setRows((data ?? []) as Row[]); setLoading(false);
     })();
-  }, []);
+  }, [profile]);
 
   const filtered = rows.filter(r => r.name.toLowerCase().includes(q.toLowerCase()) || r.trade.toLowerCase().includes(q.toLowerCase()));
 
