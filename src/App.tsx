@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard.tsx";
 import TrainerDashboard from "./pages/TrainerDashboard.tsx";
 import PrincipalDashboard from "./pages/PrincipalDashboard.tsx";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
+import StudentDashboard from "./pages/StudentDashboard.tsx";
+import EmployerSearch from "./pages/EmployerSearch.tsx";
 import PassportBrowse from "./pages/PassportBrowse.tsx";
 import Verify from "./pages/Verify.tsx";
 import About from "./pages/About.tsx";
@@ -38,6 +40,8 @@ const App = () => (
             <Route path="/trainer" element={<ProtectedRoute roles={["trainer", "principal", "iti_admin"]}><TrainerDashboard /></ProtectedRoute>} />
             <Route path="/principal" element={<ProtectedRoute roles={["principal", "iti_admin"]}><PrincipalDashboard /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute roles={["iti_admin"]}><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/student" element={<ProtectedRoute roles={["student", "iti_admin"]}><StudentDashboard /></ProtectedRoute>} />
+            <Route path="/search" element={<EmployerSearch />} />
             <Route path="/passport" element={<ProtectedRoute><PassportBrowse /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
