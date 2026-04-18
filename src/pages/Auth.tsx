@@ -18,10 +18,18 @@ const Auth = () => {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) { setLoading(false); toast({ title: "Sign in failed", description: error.message, variant: "destructive" }); return; }
+    // Wait for profile to be available before navigating to avoid the dashboard bouncing back to /auth.
+    if (data.user) {
+      for (let i = 0; i < 10; i++) {
+        const { data: prof } = await supabase.from("profiles").select("role").eq("user_id", data.user.id).maybeSingle();
+        if (prof) break;
+        await new Promise(r => setTimeout(r, 150));
+      }
+    }
     setLoading(false);
-    if (error) { toast({ title: "Sign in failed", description: error.message, variant: "destructive" }); return; }
-    navigate("/dashboard");
+    navigate("/dashboard", { replace: true });
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
