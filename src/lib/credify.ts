@@ -1,4 +1,4 @@
-// Shared Credify utilities
+// Shared NSR utilities
 export async function sha256(input: string): Promise<string> {
   const enc = new TextEncoder().encode(input);
   const buf = await crypto.subtle.digest("SHA-256", enc);
@@ -29,7 +29,7 @@ export type OfflineCredential = {
   createdAt: string;
 };
 
-const KEY = "credify_offline_queue";
+const KEY = "nsr_offline_queue";
 export function getOfflineQueue(): OfflineCredential[] {
   try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { return []; }
 }
