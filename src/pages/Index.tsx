@@ -55,20 +55,25 @@ const Index = () => (
     </section>
 
     <section className="bg-card border border-border rounded-lg p-6 md:p-8">
-      <h2 className="text-xl font-semibold tracking-tight">Demo accounts</h2>
-      <p className="text-sm text-muted-foreground mt-1">Pre-whitelisted for evaluation. Sign up with any password (≥6 chars).</p>
-      <div className="grid sm:grid-cols-3 gap-3 mt-5 text-sm">
-        <div className="p-3 rounded-md bg-surface-1 border border-border">
-          <div className="text-[10px] uppercase tracking-wider text-primary font-semibold mb-1">ITI Admin</div>
-          <div className="font-mono text-xs">admin@credify.gov.in</div>
+      <h2 className="text-xl font-semibold tracking-tight uppercase tracking-wider text-muted-foreground mb-4">Official Test Environments</h2>
+      <p className="text-sm text-muted-foreground mb-6">These pre-whitelisted accounts are available for system evaluation. Use any password (min 6 chars).</p>
+      
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="p-4 rounded-lg bg-surface-1 border border-border hover:border-primary/50 transition-colors">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-primary font-bold mb-2">System Admin</div>
+          <div className="font-mono text-xs break-all">admin@credify.gov.in</div>
         </div>
-        <div className="p-3 rounded-md bg-surface-1 border border-border">
-          <div className="text-[10px] uppercase tracking-wider text-primary font-semibold mb-1">Principal</div>
-          <div className="font-mono text-xs">principal@iti-mumbai.gov.in</div>
+        <div className="p-4 rounded-lg bg-surface-1 border border-border hover:border-primary/50 transition-colors">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-primary font-bold mb-2">Institution Principal</div>
+          <div className="font-mono text-xs break-all">principal@iti-mumbai.gov.in</div>
         </div>
-        <div className="p-3 rounded-md bg-surface-1 border border-border">
-          <div className="text-[10px] uppercase tracking-wider text-primary font-semibold mb-1">Trainer</div>
-          <div className="font-mono text-xs">trainer@iti-mumbai.gov.in</div>
+        <div className="p-4 rounded-lg bg-surface-1 border border-border hover:border-primary/50 transition-colors">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-primary font-bold mb-2">Master Trainer</div>
+          <div className="font-mono text-xs break-all">trainer@iti-mumbai.gov.in</div>
+        </div>
+        <div className="p-4 rounded-lg bg-surface-1 border border-border hover:border-primary/50 transition-colors shadow-sm">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-success font-bold mb-2">Student (Verified)</div>
+          <div className="font-mono text-xs break-all">priya.welder@nsr.in</div>
         </div>
       </div>
     </section>
