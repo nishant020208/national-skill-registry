@@ -116,9 +116,9 @@ The system supports large-scale data seeding via two dedicated Supabase Edge Fun
 
 | Role | Email | Institution | Password |
 |------|-------|-------------|----------|
-| ITI Admin | `admin@credify.in` | — | `NATIONAL SKILL REGISTRY@2026` |
-| Principal | `principal@credify.in` | ITI Institute 9 | `NATIONAL SKILL REGISTRY@2026` |
-| Trainer | `trainer@credify.in` | ITI Institute 9 | `NATIONAL SKILL REGISTRY@2026` |
+| ITI Admin | `admin@credify.in` | — | `Credify@2026` |
+| Principal | `principal@credify.in` | ITI Institute 9 | `Credify@2026` |
+| Trainer | `trainer@credify.in` | ITI Institute 9 | `Credify@2026` |
 | Student | `priya.welder@nsr.in` | ITI Institute 9 | `Priya@2026` |
 
 **Note**: Demo accounts are for development and testing only. Credentials should be rotated in production environments.
@@ -430,7 +430,7 @@ Submit issues via GitHub Issues with:
 
 ### License
 
-[Specify license type if applicable]
+MIT LICENSE 2026 
 
 ---
 
