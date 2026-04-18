@@ -253,6 +253,7 @@ const Verify = () => {
 
         <p className="text-xs text-muted-foreground text-center mt-8">Verified by Credify · No login required · Public verification page</p>
       </main>
+      <SiteFooter />
     </div>
   );
 };
