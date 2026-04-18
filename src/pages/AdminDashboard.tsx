@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Building2, UserPlus, Users, Award, AlertTriangle, TrendingUp, Inbox } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { Building2, UserPlus, Users, Award, AlertTriangle, TrendingUp, Inbox, Settings as SettingsIcon } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/AppShell";
@@ -12,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { EmptyState } from "@/components/EmptyState";
+import { SettingsPanel } from "@/components/SettingsPanel";
 
 type Inst = { id: string; name: string; location: string | null };
 type WL = { id: string; email: string; role: string; institution_id: string | null; is_used: boolean };
@@ -28,6 +30,8 @@ const AdminDashboard = () => {
   const [iName, setIName] = useState(""); const [iLoc, setILoc] = useState("");
   const [wEmail, setWEmail] = useState(""); const [wRole, setWRole] = useState("trainer"); const [wInst, setWInst] = useState("");
   const [openInst, setOpenInst] = useState(false); const [openWL, setOpenWL] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const tab = params.get("tab") ?? "overview";
 
   const load = async () => {
     setLoading(true);
@@ -119,11 +123,12 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      <Tabs defaultValue="overview" className="w-full">
+      <Tabs value={tab} onValueChange={(v) => setParams({ tab: v })} className="w-full">
         <TabsList className="mb-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="whitelist">Whitelist ({wl.length})</TabsTrigger>
           <TabsTrigger value="institutions">Institutions ({insts.length})</TabsTrigger>
+          <TabsTrigger value="settings"><SettingsIcon className="size-3.5 mr-1" />Settings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview">
@@ -241,6 +246,9 @@ const AdminDashboard = () => {
                   ))}
                 </div>}
           </div>
+        </TabsContent>
+        <TabsContent value="settings">
+          <SettingsPanel />
         </TabsContent>
       </Tabs>
     </AppShell>

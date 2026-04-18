@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Building2, ShieldX, ExternalLink, TrendingUp, CheckCircle2, XCircle, Inbox, Award, BadgeCheck } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
+import { Building2, ShieldX, ExternalLink, TrendingUp, CheckCircle2, XCircle, Inbox, Award, BadgeCheck, Settings as SettingsIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { AppShell } from "@/components/AppShell";
@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { levelColor, levelLabel, statusBadgeClass, statusLabel } from "@/lib/credify";
 import { EmptyState } from "@/components/EmptyState";
 import { Leaderboard } from "@/components/Leaderboard";
+import { SettingsPanel } from "@/components/SettingsPanel";
 
 type Cred = { id: string; level: number; status: string; hash: string; created_at: string; student_id: string; students: { name: string } | null; skills: { name: string } | null };
 type Reass = { id: string; reason: string; status: string; created_at: string; student_id: string; students: { name: string } | null };
@@ -24,6 +25,8 @@ const PrincipalDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [rejectingId, setRejectingId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+  const [params, setParams] = useSearchParams();
+  const tab = params.get("tab") ?? "pending";
 
   const load = async () => {
     if (!profile?.institution_id) { setLoading(false); return; }
@@ -104,13 +107,14 @@ const PrincipalDashboard = () => {
         <Stat icon={TrendingUp} label="Trust score" value={trustScore} suffix="%" success />
       </div>
 
-      <Tabs defaultValue="pending" className="w-full">
+      <Tabs value={tab} onValueChange={(v) => setParams({ tab: v })} className="w-full">
         <TabsList className="mb-4">
-          <TabsTrigger value="pending">Pending Approvals ({pending.length})</TabsTrigger>
+          <TabsTrigger value="pending">Pending ({pending.length})</TabsTrigger>
           <TabsTrigger value="approved">Approved ({approved.length})</TabsTrigger>
           <TabsTrigger value="rejected">Rejected ({rejected.length})</TabsTrigger>
-          <TabsTrigger value="reass">Re-assessment ({pendingReass.length})</TabsTrigger>
+          <TabsTrigger value="reass">Re-assess ({pendingReass.length})</TabsTrigger>
           <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
+          <TabsTrigger value="settings"><SettingsIcon className="size-3.5 mr-1" />Settings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="pending">
@@ -186,6 +190,10 @@ const PrincipalDashboard = () => {
 
         <TabsContent value="leaderboard">
           <Leaderboard institutionId={profile?.institution_id} />
+        </TabsContent>
+
+        <TabsContent value="settings">
+          <SettingsPanel />
         </TabsContent>
       </Tabs>
     </AppShell>
