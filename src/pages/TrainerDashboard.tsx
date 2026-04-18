@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, WifiOff, RefreshCw, Users, BadgeCheck, Award, Inbox, Trophy, CheckCircle2, XCircle, ExternalLink } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Plus, WifiOff, RefreshCw, Users, BadgeCheck, Award, Inbox, CheckCircle2, XCircle, ExternalLink, Settings as SettingsIcon } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { AppShell } from "@/components/AppShell";
@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { sha256, levelLabel, statusBadgeClass, statusLabel, getOfflineQueue, addToOfflineQueue, removeFromQueue, type OfflineCredential } from "@/lib/credify";
 import { EmptyState } from "@/components/EmptyState";
 import { Leaderboard } from "@/components/Leaderboard";
+import { SettingsPanel } from "@/components/SettingsPanel";
 
 type Student = { id: string; name: string; trade: string; user_id: string | null };
 type Skill = { id: string; name: string };
@@ -36,8 +37,10 @@ const TrainerDashboard = () => {
   const [queue, setQueue] = useState<OfflineCredential[]>(getOfflineQueue());
   const [offline, setOffline] = useState(!navigator.onLine);
 
-  const [sName, setSName] = useState(""); const [sTrade, setSTrade] = useState("");
+  const [sName, setSName] = useState(""); const [sTrade, setSTrade] = useState(""); const [sEmail, setSEmail] = useState("");
   const [openAdd, setOpenAdd] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const tab = params.get("tab") ?? "students";
 
   useEffect(() => {
     const on = () => setOffline(false), off = () => setOffline(true);
@@ -69,7 +72,21 @@ const TrainerDashboard = () => {
     if (!profile?.institution_id) return;
     const { error } = await supabase.from("students").insert({ name: sName, trade: sTrade, institution_id: profile.institution_id });
     if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
-    toast({ title: "Student added" }); setSName(""); setSTrade(""); setOpenAdd(false); load();
+    if (sEmail.trim()) {
+      const { error: wlErr } = await supabase.from("whitelist").insert({
+        email: sEmail.toLowerCase().trim(),
+        role: "student" as any,
+        institution_id: profile.institution_id,
+      });
+      if (wlErr && !/duplicate|unique/i.test(wlErr.message)) {
+        toast({ title: "Student added, email whitelist failed", description: wlErr.message, variant: "destructive" });
+      } else {
+        toast({ title: "Student added", description: `${sEmail} can now register & auto-link.` });
+      }
+    } else {
+      toast({ title: "Student added" });
+    }
+    setSName(""); setSTrade(""); setSEmail(""); setOpenAdd(false); load();
   };
 
   const approveRequest = async (req: Req) => {
@@ -144,7 +161,12 @@ const TrainerDashboard = () => {
             <form onSubmit={addStudent} className="space-y-4">
               <div><Label>Name</Label><Input required value={sName} onChange={e => setSName(e.target.value)} /></div>
               <div><Label>Trade</Label><Input required placeholder="e.g. Fitter, Electrician" value={sTrade} onChange={e => setSTrade(e.target.value)} /></div>
-              <Button className="w-full">Add</Button>
+              <div>
+                <Label>Email <span className="text-muted-foreground font-normal">(optional, for self-registration)</span></Label>
+                <Input type="email" placeholder="student@example.com" value={sEmail} onChange={e => setSEmail(e.target.value)} />
+                <p className="text-[11px] text-muted-foreground mt-1">If provided, the student can sign up with this email and auto-link to this record.</p>
+              </div>
+              <Button className="w-full">Add student</Button>
             </form>
           </DialogContent>
         </Dialog>
