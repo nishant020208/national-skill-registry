@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, WifiOff, RefreshCw, Users, BadgeCheck, Award, Inbox, CheckCircle2, XCircle, ExternalLink, Settings as SettingsIcon } from "lucide-react";
+import { Plus, WifiOff, RefreshCw, Users, BadgeCheck, Award, Inbox, CheckCircle2, XCircle, ExternalLink, Settings as SettingsIcon, Send } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -39,6 +39,9 @@ const TrainerDashboard = () => {
 
   const [sName, setSName] = useState(""); const [sTrade, setSTrade] = useState(""); const [sEmail, setSEmail] = useState("");
   const [openAdd, setOpenAdd] = useState(false);
+  // Issue credential directly
+  const [openIssue, setOpenIssue] = useState(false);
+  const [issStudent, setIssStudent] = useState(""); const [issSkill, setIssSkill] = useState(""); const [issLevel, setIssLevel] = useState("2"); const [issNote, setIssNote] = useState("");
   const [params, setParams] = useSearchParams();
   const tab = params.get("tab") ?? "students";
 
@@ -109,6 +112,25 @@ const TrainerDashboard = () => {
     load();
   };
 
+  const issueCredential = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || !profile?.institution_id || !issStudent || !issSkill) return;
+    const ts = new Date().toISOString();
+    const level = Number(issLevel);
+    const hash = await sha256(`${issStudent}|${issSkill}|${level}|${ts}`);
+    const { data: cred, error } = await supabase.from("credentials").insert({
+      student_id: issStudent, skill_id: issSkill, level,
+      issued_by: user.id, institution_id: profile.institution_id, hash,
+      status: "pending_principal" as any,
+      trainer_approved_by: user.id, trainer_approved_at: ts,
+    }).select("id").single();
+    if (error || !cred) return toast({ title: "Failed", description: error?.message, variant: "destructive" });
+    await supabase.from("credential_logs").insert({ credential_id: cred.id, action: "trainer_issued", performed_by: user.id });
+    toast({ title: "Credential issued", description: "Sent to Principal for final approval." });
+    setIssStudent(""); setIssSkill(""); setIssLevel("2"); setIssNote(""); setOpenIssue(false);
+    load();
+  };
+
   const rejectRequest = async (req: Req, reason: string) => {
     if (!user) return;
     const ts = new Date().toISOString();
@@ -154,6 +176,42 @@ const TrainerDashboard = () => {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Welcome back, {profile?.name?.split(" ")[0] ?? "Trainer"}</h1>
           <p className="text-sm text-muted-foreground mt-1">Review student requests, manage your trainees and track verified credentials.</p>
         </div>
+        <div className="flex flex-wrap gap-2">
+        <Dialog open={openIssue} onOpenChange={setOpenIssue}>
+          <DialogTrigger asChild><Button><Send className="size-4 mr-1" />Issue credential</Button></DialogTrigger>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Issue a credential</DialogTitle></DialogHeader>
+            <form onSubmit={issueCredential} className="space-y-4">
+              <div>
+                <Label>Student</Label>
+                <Select value={issStudent} onValueChange={setIssStudent}>
+                  <SelectTrigger><SelectValue placeholder="Choose a student" /></SelectTrigger>
+                  <SelectContent className="max-h-72">
+                    {students.map(s => <SelectItem key={s.id} value={s.id}>{s.name} · {s.trade}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Skill</Label>
+                <Select value={issSkill} onValueChange={setIssSkill}>
+                  <SelectTrigger><SelectValue placeholder="Choose a skill" /></SelectTrigger>
+                  <SelectContent className="max-h-72">
+                    {skills.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Level</Label>
+                <Select value={issLevel} onValueChange={setIssLevel}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>{[1,2,3,4].map(l => <SelectItem key={l} value={String(l)}>Level {l} — {levelLabel(l)}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <p className="text-xs text-muted-foreground">After you issue, the credential goes to the Principal for final approval before it becomes verifiable.</p>
+              <Button className="w-full" disabled={!issStudent || !issSkill}>Issue & send to Principal</Button>
+            </form>
+          </DialogContent>
+        </Dialog>
         <Dialog open={openAdd} onOpenChange={setOpenAdd}>
           <DialogTrigger asChild><Button variant="outline"><Plus className="size-4 mr-1" />Add student</Button></DialogTrigger>
           <DialogContent>
@@ -170,6 +228,7 @@ const TrainerDashboard = () => {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       {(offline || queue.length > 0) && (
