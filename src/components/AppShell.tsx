@@ -11,8 +11,6 @@ const sidebarFor = (role?: string): NavItem[] => {
   if (role === "iti_admin") return [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { to: "/passport", label: "Skill Passport", icon: IdCard },
-    { to: "/principal", label: "Approvals", icon: Inbox },
-    { to: "/trainer", label: "Trainer view", icon: Award },
     { to: "/search", label: "Employer Search", icon: Search },
     { to: "/admin?tab=settings", label: "Settings", icon: Settings },
   ];
