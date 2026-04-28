@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-The National Skill Registry is a comprehensive, tamper-proof digital credential management and verification platform designed for technical graduates from ITI (Industrial Training Institutes) and Polytechnic institutions across India. The system provides verifiable skill credentials with QR-based verification capabilities, enabling employers to authenticate graduate competencies in seconds without requiring login credentials.
+The National Skills Registry is a comprehensive, tamper-proof digital credential management and verification platform designed for technical graduates from ITI (Industrial Training Institutes) and Polytechnic institutions across India. The system provides verifiable skill credentials with QR-based verification capabilities, enabling employers to authenticate graduate competencies in seconds without requiring login credentials.
 
 ---
 
