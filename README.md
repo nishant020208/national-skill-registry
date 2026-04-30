@@ -1,4 +1,4 @@
-# NATIONAL SKILL REGISTRY
+# NATIONAL SKILLS REGISTRY
 
 **Official Government Skill Passport and Credential Verification System**
 
